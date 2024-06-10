@@ -8,16 +8,11 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
 };
 
 /* ------------ GLOBAL ERROR HANDLER -------------------*/
-interface CustomError extends Error {
+export interface CustomError extends Error {
   statusCode?: number;
 }
 
-const errorHandler = (
-  error: CustomError,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
+const errorHandler = (error: CustomError, req: Request,res: Response, next: NextFunction): void => {
   const statusCode = error.statusCode || 500;
   const message = error.message || 'An unexpected error occurred';
 
@@ -25,7 +20,8 @@ const errorHandler = (
     success: false,
     message: message,
     error: {
-      name: error.name,
+      // name: error.name,
+      code : statusCode,
       description: error.message,
       // stack: config.stack === 'production' ? null : error.stack,
     },

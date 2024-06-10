@@ -36,6 +36,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+// Retrieve a list of all users
 const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await userServices.getAllUserFromDB();
@@ -50,9 +51,59 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-// Retrieve a list of all users
+// Retrieve a specific user by ID
+const getUserbyUserId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userId } = req.params;
+    const result = await userServices.getUserByUserIdFromDB(userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'User fetched successfully!',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateUserbyUserId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userId } = req.params;
+    const { user: userData } = req.body;
+    const result = await userServices.updateUserInfoIntoDB(userId, userData);
+
+    res.status(200).json({
+      success: true,
+      message: 'User fetched successfully!',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteUserbyUserId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userId } = req.params;
+
+    const result = await userServices.deleteUserFromDB(userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully!',
+      data: null,
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const userControllers = {
   createUser,
   getAllUsers,
+  getUserbyUserId,
+  updateUserbyUserId,
+  deleteUserbyUserId,
 };

@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Query, Schema, model } from 'mongoose';
 import {
   TAddress,
   TFullName,
@@ -121,15 +121,28 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('findOneAndUpdate', async function (next) {
+  const userInfo = this.getUpdate() as TUser;
+  console.log(1,userInfo.password)
+  next();
+});
+
+
 // remove the password after saving
 userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
 });
 
+
+// userSchema.post(/^find/,function(this : Query<TUser,Document>,next){
+//   this.password = '';
+//   next()
+// })
+
 //exist check function implementation
-userSchema.statics.isUserExist = async function (id: string) {
-  const existingUserInfo = await user.findOne({ id });
+userSchema.statics.isUserExist = async function (userId: string) {
+  const existingUserInfo = await user.findOne({ userId });
   return existingUserInfo;
 };
 
